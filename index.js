@@ -41,6 +41,21 @@ app.post("/cadastrar", (request, response) => {
     })
 })
 
+app.delete("/apagar/:id", (request, response) => {
+    const { id } = request.params
+
+    const comandoDelete = "DELETE FROM musicas_NicolasArsenio WHERE id = ?"
+
+    sql.query(comandoDelete, [id], (error) => {
+        if (error) {
+            console.log(error)
+            return response.status(500).json({ erro: error.message })
+        }
+
+        response.json({ mensagem: "Música apagada com sucesso!" })
+    })
+})
+
 function mensagem() {
     console.log("Servidor online")
 }
