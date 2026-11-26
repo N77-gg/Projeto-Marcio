@@ -26,6 +26,21 @@ app.get("/", (request, response) => {
     })
 })
 
+app.get("/musica/:id", (request, response) => {
+    const { id } = request.params
+
+    const comandoSelect = "SELECT * FROM musicas_NicolasArsenio WHERE id = ?"
+
+    sql.query(comandoSelect, [id], (error, data) => {
+        if (error) {
+            console.log(error)
+            return response.status(500).json({ erro: error.message })
+        }
+
+        response.json(data[0])
+    })
+})
+
 app.post("/cadastrar", (request, response) => {
     const { titulo, artista, genero, ano, duracao } = request.body
 
@@ -38,6 +53,22 @@ app.post("/cadastrar", (request, response) => {
         }
 
         response.status(201).json({ mensagem: "Música cadastrada com sucesso!" })
+    })
+})
+
+app.put("/editar/:id", (request, response) => {
+    const { id } = request.params
+    const { titulo, artista, genero, ano, duracao } = request.body
+
+    const comandoUpdate = "UPDATE musicas_NicolasArsenio SET titulo = ?, artista = ?, genero = ?, ano = ?, duracao = ? WHERE id = ?"
+
+    sql.query(comandoUpdate, [titulo, artista, genero, ano, duracao, id], (error) => {
+        if (error) {
+            console.log(error)
+            return response.status(500).json({ erro: error.message })
+        }
+
+        response.json({ mensagem: "Música atualizada com sucesso!" })
     })
 })
 
